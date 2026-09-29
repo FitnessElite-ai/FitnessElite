@@ -1,8 +1,11 @@
-FROM ghcr.io/cirruslabs/flutter:stable AS build
+FROM ghcr.io/cirruslabs/flutter:3.47.5 AS build
 
 WORKDIR /app
 
 COPY pubspec.* ./
+
+RUN flutter --version
+RUN dart --version
 RUN flutter pub get
 
 COPY . .
