@@ -448,6 +448,34 @@ class _ExerciseStageView extends StatelessWidget {
 
         const SizedBox(height: 16),
 
+        // Live Compact Breathing Cue
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.electricBlue.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.electricBlue.withValues(alpha: 0.3)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: const [
+                  Icon(Icons.air_rounded, size: 16, color: AppColors.electricBlue),
+                  SizedBox(width: 8),
+                  Text('BREATHE', style: TextStyle(color: AppColors.electricBlue, fontWeight: FontWeight.w900, fontSize: 10)),
+                ],
+              ),
+              Text(
+                '${exercise!.inhaleInstruction} • ${exercise!.exhaleInstruction}',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11, fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
         // Breathing Coaching Banner
         GlassCard(
           padding: const EdgeInsets.all(16),

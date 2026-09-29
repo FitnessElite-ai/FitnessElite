@@ -1,6 +1,7 @@
 import 'package:fitness_elite/core/services/agent_observability_service.dart';
 import 'package:fitness_elite/core/services/fitness_notification_service.dart';
 import 'package:fitness_elite/core/services/local_storage_service.dart';
+import 'package:fitness_elite/core/services/persistence_providers.dart';
 import 'package:fitness_elite/features/agent/memory/fitness_memory_service.dart';
 import 'package:fitness_elite/features/agent/models/agent_context.dart';
 import 'package:fitness_elite/features/agent/models/agent_log.dart';
@@ -12,12 +13,21 @@ import 'package:fitness_elite/features/agent/services/agent_context_builder.dart
 import 'package:fitness_elite/features/agent/services/fitness_agent.dart';
 import 'package:fitness_elite/features/agent/services/specialized_agents.dart';
 import 'package:fitness_elite/features/agent/tools/fitness_tools.dart';
+import 'package:fitness_elite/features/agent/ui/screens/agent_memory_screen.dart';
 import 'package:fitness_elite/features/ai_coach/models/complete_fitness_profile.dart';
 import 'package:fitness_elite/features/ai_coach/models/fitness_preferences.dart';
 import 'package:fitness_elite/features/ai_coach/services/conversational_ai_provider.dart';
+import 'package:fitness_elite/features/breathwork/policies/breath_safety_policy.dart';
+import 'package:fitness_elite/features/breathwork/services/breathing_library.dart';
+import 'package:fitness_elite/features/breathwork/services/breathing_session_engine.dart';
+import 'package:fitness_elite/features/devices/models/device_fitness_data.dart';
 import 'package:fitness_elite/features/fitness_engine/models/workout_day.dart';
 import 'package:fitness_elite/features/health_assessment/domain/fitness_profile.dart';
+import 'package:fitness_elite/features/voice/services/voice_agent_service.dart';
 import 'package:fitness_elite/features/workouts/models/workout_history_log.dart';
+import 'package:fitness_elite/features/yoga/services/yoga_library.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -140,6 +150,8 @@ void main() {
       final recoveryAgent = RecoveryAgent();
       final progressAgent = ProgressAgent();
       final visionAgent = VisionAgent();
+      final deviceAgent = DeviceAgent();
+      final yogaAgent = YogaAgent();
 
       const context = AgentContext();
 
@@ -148,6 +160,8 @@ void main() {
       expect(recoveryAgent.evaluate(context).agentName, equals('RecoveryAgent'));
       expect(progressAgent.evaluate(context).agentName, equals('ProgressAgent'));
       expect(visionAgent.evaluate(context).agentName, equals('VisionAgent'));
+      expect(deviceAgent.evaluate(context).agentName, equals('DeviceAgent'));
+      expect(yogaAgent.evaluate(context).agentName, equals('YogaAgent'));
     });
 
     test('6. WorkoutAgent proposes volume reduction upon high fatigue feedback', () {
@@ -185,7 +199,7 @@ void main() {
       expect(output.proposedActions.first.parameters['durationMinutes'], equals(30));
     });
 
-    test('7. All 16 Agent Tool abstractions execute parameter validation and returns data', () async {
+    test('7. All Agent Tool abstractions execute parameter validation and returns data', () async {
       final getProfileTool = GetFitnessProfileTool(null);
       expect((await getProfileTool.execute({})).success, isFalse);
 
@@ -198,9 +212,9 @@ void main() {
       final logRes = await logFeedbackTool.execute({'rating': 'Very challenging'});
       expect(logRes.success, isTrue);
 
-      final updateGoalTool = UpdateGoalTool();
-      final goalRes = await updateGoalTool.execute({'primaryGoal': 'Lose fat'});
-      expect(goalRes.success, isTrue);
+      final yogaTool = GenerateYogaSessionTool();
+      final yogaRes = await yogaTool.execute({'durationMinutes': 10});
+      expect(yogaRes.success, isTrue);
     });
 
     test('8. AgentOrchestrator runs daily cycle and applies permission filtering', () {
@@ -286,6 +300,100 @@ void main() {
       service.logAgentRun(log);
       expect(service.getLogs().length, equals(1));
       expect(service.getLogs().first.durationMs, equals(42));
+    });
+
+    test('14. DeviceAgent detects poor sleep and triggers recovery active mobility', () {
+      final deviceAgent = DeviceAgent();
+      final data = DeviceFitnessData(
+        source: 'HealthKit',
+        steps: 8000,
+        sleepDurationHours: 5.2, // Poor sleep
+        restingHeartRate: 64,
+        timestamp: DateTime.now(),
+      );
+
+      final context = AgentContext(deviceData: data);
+      final output = deviceAgent.evaluate(context);
+
+      expect(output.proposedActions.length, equals(1));
+      expect(output.proposedActions.first.type, equals('generate_yoga_session'));
+    });
+
+    test('15. YogaLibrary generates 10-minute recovery mobility sessions', () {
+      final session = YogaLibrary.generateRecoverySession(durationMin: 10);
+      expect(session.durationMinutes, equals(10));
+      expect(session.poses.length, greaterThanOrEqualTo(5));
+      expect(session.poses.first.name.isNotEmpty, isTrue);
+    });
+
+    test('16. VoiceAgentService processes voice inputs and returns safe response', () async {
+      final voiceService = VoiceAgentService();
+      const context = AgentContext();
+
+      final resp = await voiceService.processVoiceQuery(
+        speechText: 'I only have 20 minutes today and I feel tired',
+        context: context,
+      );
+
+      expect(resp.isNotEmpty, isTrue);
+      expect(resp, isNot(contains('medical diagnosis')));
+    });
+
+    testWidgets('17. AgentMemoryScreen renders AppBar leading back icon and Your Fitness Memory title', (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final localStorage = LocalStorageService(prefs);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            localStorageServiceProvider.overrideWithValue(localStorage),
+          ],
+          child: const MaterialApp(
+            home: AgentMemoryScreen(),
+          ),
+        ),
+      );
+
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byIcon(Icons.arrow_back_rounded), findsOneWidget);
+      expect(find.text('Your Fitness Memory'), findsOneWidget);
+      expect(find.text('YOUR FITNESS MEMORY'), findsOneWidget);
+      expect(find.text('FitnessElite.ai learns what works for you.'), findsOneWidget);
+    });
+
+    test('18. BreathSafetyPolicy validates and sanitizes breathing instructions', () {
+      const unsafe = 'hold breath for 2 minutes and hyperventilate';
+      expect(BreathSafetyPolicy.validateInstructions(unsafe), isFalse);
+      expect(BreathSafetyPolicy.sanitizeText(unsafe), contains('Maintain comfortable, rhythmic breathing'));
+
+      const safe = 'Inhale smoothly for 4 seconds, then exhale for 4 seconds.';
+      expect(BreathSafetyPolicy.validateInstructions(safe), isTrue);
+    });
+
+    test('19. BreathingLibrary catalog provides 10 beginner-friendly breathing exercises', () {
+      final catalog = BreathingLibrary.catalog;
+      expect(catalog.length, equals(10));
+      final defaultSession = BreathingLibrary.getDefaultSession(category: 'Calm');
+      expect(defaultSession.name.isNotEmpty, isTrue);
+      expect(defaultSession.inhaleSeconds, greaterThan(0));
+    });
+
+    test('20. BreathingSessionEngine executes deterministic phase transitions and timers', () {
+      final exercise = BreathingLibrary.catalog.first;
+      BreathingSessionState? lastState;
+
+      final engine = BreathingSessionEngine(
+        exercise: exercise,
+        onTick: (state) => lastState = state,
+      );
+
+      engine.start();
+      expect(lastState?.phase, equals(BreathPhase.preparing));
+
+      engine.stop();
+      expect(lastState?.phase, equals(BreathPhase.stopped));
     });
   });
 }

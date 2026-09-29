@@ -1,4 +1,5 @@
 import '../../ai_coach/models/complete_fitness_profile.dart';
+import '../../devices/models/device_fitness_data.dart';
 import '../../fitness_engine/models/fitness_plan.dart';
 import '../../fitness_engine/models/workout_day.dart';
 import '../../workouts/models/workout_history_log.dart';
@@ -13,6 +14,7 @@ class AgentContextBuilder {
     List<WorkoutHistoryLog> history = const [],
     List<AgentMemory> memories = const [],
     List<AgentObservation> observations = const [],
+    DeviceFitnessData? deviceData,
   }) {
     WorkoutDay? todayWorkout;
     if (currentPlan != null && currentPlan.weeklySchedule.isNotEmpty) {
@@ -27,6 +29,7 @@ class AgentContextBuilder {
       workoutHistory: history,
       memories: memories,
       observations: observations,
+      deviceData: deviceData,
     );
   }
 }

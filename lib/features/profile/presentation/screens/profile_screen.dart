@@ -12,6 +12,7 @@ import '../../../../shared/widgets/fitness_elite_logo.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../../ai_coach/providers/ai_coach_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../devices/ui/screens/device_connection_screen.dart';
 import '../../../fitness_engine/providers/fitness_engine_provider.dart';
 import '../../../subscription/presentation/screens/paywall_screen.dart';
 import '../../../subscription/providers/subscription_provider.dart';
@@ -175,7 +176,21 @@ class ProfileScreen extends ConsumerWidget {
                         icon: Icons.psychology_rounded,
                         title: 'My Fitness Memory',
                         subtitle: 'Inspect & edit learned preferences',
-                        onTap: () => context.go('/agent-memory'),
+                        onTap: () => context.push('/agent-memory'),
+                      ),
+                      const SizedBox(height: 8),
+
+                      _SettingsTile(
+                        icon: Icons.watch_rounded,
+                        title: 'Connected Devices & Wearables',
+                        subtitle: 'Sync Apple Health, Health Connect, or Bluetooth',
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const DeviceConnectionScreen(),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 8),
 

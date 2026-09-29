@@ -17,6 +17,7 @@ import '../fitness_engine/providers/fitness_engine_provider.dart';
 import '../nutrition/presentation/screens/nutrition_screen.dart';
 import '../profile/presentation/screens/profile_screen.dart';
 import '../progress/presentation/screens/progress_screen.dart';
+import '../voice/ui/widgets/voice_assistant_bottom_sheet.dart';
 import '../workouts/providers/workout_session_provider.dart';
 import 'demo_mode_provider.dart';
 
@@ -46,6 +47,13 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
 
     return Scaffold(
       body: pages[_currentIndex],
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => VoiceAssistantBottomSheet.show(context),
+        backgroundColor: AppColors.electricBlue,
+        foregroundColor: Colors.black,
+        icon: const Icon(Icons.mic_rounded, size: 20),
+        label: const Text('Ask FitnessElite.ai', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
@@ -233,7 +241,7 @@ class _HomeDashboardTab extends ConsumerWidget {
                               icon: const Icon(Icons.auto_awesome_rounded,
                                   color: AppColors.electricBlue),
                               tooltip: 'Agent Intelligence',
-                              onPressed: () => context.go('/agent-intelligence'),
+                              onPressed: () => context.push('/agent-intelligence'),
                             ),
                           ],
                         ),
@@ -381,7 +389,7 @@ class _HomeDashboardTab extends ConsumerWidget {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () => context.go('/agent-intelligence'),
+                                onPressed: () => context.push('/agent-intelligence'),
                                 child: const Text('View Why',
                                     style: TextStyle(
                                         color: AppColors.electricBlue,
@@ -567,7 +575,7 @@ class _HomeDashboardTab extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton.icon(
-                              onPressed: () => context.go('/agent-timeline'),
+                              onPressed: () => context.push('/agent-activity'),
                               icon: const Icon(Icons.timeline_rounded,
                                   size: 16, color: AppColors.electricBlue),
                               label: const Text('AI Activity',
@@ -577,7 +585,7 @@ class _HomeDashboardTab extends ConsumerWidget {
                                 style:
                                     TextStyle(color: AppColors.electricBlue)),
                             TextButton.icon(
-                              onPressed: () => context.go('/agent-memory'),
+                              onPressed: () => context.push('/agent-memory'),
                               icon: const Icon(Icons.psychology_rounded,
                                   size: 16, color: AppColors.electricBlue),
                               label: const Text('Your AI Knows',
@@ -588,7 +596,7 @@ class _HomeDashboardTab extends ConsumerWidget {
                                     TextStyle(color: AppColors.electricBlue)),
                             TextButton.icon(
                               onPressed: () =>
-                                  context.go('/agent-intelligence'),
+                                  context.push('/agent-intelligence'),
                               icon: const Icon(Icons.auto_awesome_rounded,
                                   size: 16, color: AppColors.electricBlue),
                               label: const Text('Agent',

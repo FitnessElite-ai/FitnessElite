@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/utils/responsive_utils.dart';
 import '../../../../shared/animations/fade_in_animation.dart';
@@ -23,6 +24,19 @@ class AgentActivityScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, size: 22),
+          onPressed: () {
+            if (GoRouter.maybeOf(context) != null && context.canPop()) {
+              context.pop();
+            } else if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go('/home');
+            }
+          },
+          tooltip: 'Back',
+        ),
         title: const FitnessEliteLogo(iconSize: 26, fontSize: 18),
       ),
       body: SafeArea(

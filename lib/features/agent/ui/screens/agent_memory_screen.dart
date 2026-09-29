@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/utils/responsive_utils.dart';
 import '../../../../shared/animations/fade_in_animation.dart';
 import '../../../../shared/animations/glass_entrance_animation.dart';
-import '../../../../shared/widgets/fitness_elite_logo.dart';
 import '../../../../shared/widgets/glass_card.dart';
 import '../../providers/agent_provider.dart';
 
@@ -38,8 +38,26 @@ class AgentMemoryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const FitnessEliteLogo(iconSize: 26, fontSize: 18),
+        centerTitle: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, size: 22),
+          onPressed: () {
+            if (GoRouter.maybeOf(context) != null && context.canPop()) {
+              context.pop();
+            } else if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go('/home');
+            }
+          },
+          tooltip: 'Back',
+        ),
+        title: Text(
+          'Your Fitness Memory',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+        ),
       ),
       body: SafeArea(
         child: Padding(

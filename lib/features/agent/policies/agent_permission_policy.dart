@@ -30,7 +30,8 @@ class AgentPermissionPolicy {
         cleanAction.contains('log_feedback') ||
         cleanAction.contains('modify_workout') ||
         cleanAction.contains('update_preference') ||
-        cleanAction.contains('store_memory')) {
+        cleanAction.contains('store_memory') ||
+        cleanAction.contains('generate_yoga_session')) {
       return ActionPermissionLevel.lowRiskWrite;
     }
 

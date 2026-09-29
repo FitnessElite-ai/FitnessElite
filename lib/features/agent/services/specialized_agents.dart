@@ -115,7 +115,6 @@ class CoachAgent {
 }
 
 /// Vision Sub-Agent evaluating optical assessment signals and posture cues.
-/// Complies with strict safety rules: never diagnoses disease or claims exact body fat/muscle mass.
 class VisionAgent {
   AgentOutput evaluate(AgentContext context) {
     final vision = context.profile?.visionAssessment;
@@ -143,6 +142,72 @@ class VisionAgent {
       agentName: 'VisionAgent',
       summary: '${vision.insights.length} visual fitness insights analyzed.',
       metadata: {'insightCount': vision.insights.length},
+    );
+  }
+}
+
+/// Device Sub-Agent evaluating wearable device signals (steps, heart rate, sleep).
+class DeviceAgent {
+  AgentOutput evaluate(AgentContext context) {
+    final deviceData = context.deviceData;
+    if (deviceData == null) {
+      return const AgentOutput(
+        agentName: 'DeviceAgent',
+        summary: 'No wearable device connected.',
+      );
+    }
+
+    if (deviceData.hasPoorSleepSignal) {
+      return AgentOutput(
+        agentName: 'DeviceAgent',
+        summary: 'Wearable signal: Poor sleep detected (${deviceData.sleepDurationHours} hrs). Recommending lighter session.',
+        proposedActions: [
+          AgentAction(
+            id: 'act_sleep_recovery_${DateTime.now().millisecondsSinceEpoch}',
+            type: 'generate_yoga_session',
+            description: 'Offer 10-min active recovery mobility session',
+            targetTool: 'GenerateYogaSessionTool',
+            parameters: {'durationMinutes': 10, 'reason': 'Short sleep signal from wearable'},
+          ),
+        ],
+      );
+    }
+
+    return AgentOutput(
+      agentName: 'DeviceAgent',
+      summary: 'Wearable signals optimal (${deviceData.steps} steps, Resting HR: ${deviceData.restingHeartRate} bpm).',
+    );
+  }
+}
+
+/// Yoga & Mobility Sub-Agent generating recovery routines and stretches.
+class YogaAgent {
+  AgentOutput evaluate(AgentContext context) {
+    return const AgentOutput(
+      agentName: 'YogaAgent',
+      summary: 'Yoga & Mobility flows ready for active recovery.',
+    );
+  }
+}
+
+/// Goal Sub-Agent evaluating long-term progress toward non-medical milestones.
+class GoalAgent {
+  AgentOutput evaluate(AgentContext context) {
+    final goal = context.profile?.fitnessPreferences.primaryGoal ?? 'Improve overall fitness';
+    return AgentOutput(
+      agentName: 'GoalAgent',
+      summary: 'Primary Target: $goal',
+    );
+  }
+}
+
+/// Habit Sub-Agent monitoring daily training consistency.
+class HabitAgent {
+  AgentOutput evaluate(AgentContext context) {
+    final streak = context.workoutHistory.length;
+    return AgentOutput(
+      agentName: 'HabitAgent',
+      summary: 'Habit streak: $streak sessions completed.',
     );
   }
 }

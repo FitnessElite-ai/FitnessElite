@@ -1,5 +1,6 @@
 import 'agent_tool.dart';
 import '../../ai_coach/models/complete_fitness_profile.dart';
+import '../../devices/models/device_fitness_data.dart';
 import '../../fitness_engine/models/fitness_plan.dart';
 import '../../fitness_engine/models/workout_day.dart';
 import '../../workouts/models/workout_history_log.dart';
@@ -396,6 +397,100 @@ class CreateRecoveryPlanTool extends AgentTool {
       success: true,
       output: 'Created recovery plan: $protocol.',
       data: {'protocol': protocol},
+    );
+  }
+}
+
+/// 17. GetDeviceDataTool
+class GetDeviceDataTool extends AgentTool {
+  final DeviceFitnessData? data;
+  GetDeviceDataTool(this.data);
+
+  @override
+  String get name => 'GetDeviceDataTool';
+  @override
+  String get description => 'Retrieves wearable signals including steps, sleep hours, and resting heart rate.';
+  @override
+  bool get isReadOnly => true;
+
+  @override
+  Future<AgentToolResult> execute(Map<String, dynamic> parameters) async {
+    if (data == null) {
+      return const AgentToolResult(success: false, output: 'No wearable device connected.');
+    }
+    return AgentToolResult(
+      success: true,
+      output: 'Device (${data!.source}): ${data!.steps} steps, ${data!.sleepDurationHours} hrs sleep, ${data!.restingHeartRate} bpm resting HR.',
+      data: data!.toMap(),
+    );
+  }
+}
+
+/// 18. GetWearableSignalsTool
+class GetWearableSignalsTool extends AgentTool {
+  final DeviceFitnessData? data;
+  GetWearableSignalsTool(this.data);
+
+  @override
+  String get name => 'GetWearableSignalsTool';
+  @override
+  String get description => 'Evaluates recovery signals (sleep deficit, elevated resting HR) from wearable devices.';
+  @override
+  bool get isReadOnly => true;
+
+  @override
+  Future<AgentToolResult> execute(Map<String, dynamic> parameters) async {
+    if (data == null) {
+      return const AgentToolResult(success: false, output: 'No wearable signals active.');
+    }
+    final poorSleep = data!.hasPoorSleepSignal;
+    return AgentToolResult(
+      success: true,
+      output: poorSleep ? 'Wearable signal: Short sleep detected.' : 'Wearable signals optimal.',
+      data: {'poorSleep': poorSleep, 'sleepHours': data!.sleepDurationHours},
+    );
+  }
+}
+
+/// 19. GenerateYogaSessionTool
+class GenerateYogaSessionTool extends AgentTool {
+  GenerateYogaSessionTool();
+
+  @override
+  String get name => 'GenerateYogaSessionTool';
+  @override
+  String get description => 'Generates a restorative Yoga & Mobility session for active recovery.';
+  @override
+  bool get isReadOnly => false;
+
+  @override
+  Future<AgentToolResult> execute(Map<String, dynamic> parameters) async {
+    final duration = (parameters['durationMinutes'] as num?)?.toInt() ?? 10;
+    return AgentToolResult(
+      success: true,
+      output: 'Generated $duration-min Recovery Yoga & Mobility Flow.',
+      data: {'durationMinutes': duration, 'category': 'Recovery Yoga'},
+    );
+  }
+}
+
+/// 20. GetYogaPreferencesTool
+class GetYogaPreferencesTool extends AgentTool {
+  GetYogaPreferencesTool();
+
+  @override
+  String get name => 'GetYogaPreferencesTool';
+  @override
+  String get description => 'Retrieves user mobility preferences and restorative focus.';
+  @override
+  bool get isReadOnly => true;
+
+  @override
+  Future<AgentToolResult> execute(Map<String, dynamic> parameters) async {
+    return const AgentToolResult(
+      success: true,
+      output: 'Yoga Preference: Recovery & Post-workout mobility focus.',
+      data: {'preference': 'Recovery & Post-workout mobility'},
     );
   }
 }
