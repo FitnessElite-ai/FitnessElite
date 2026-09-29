@@ -14,6 +14,8 @@ class AgentOrchestrator {
   final ProgressAgent _progressAgent = ProgressAgent();
   final VisionAgent _visionAgent = VisionAgent();
   final DeviceAgent _deviceAgent = DeviceAgent();
+  final WeatherAgent _weatherAgent = WeatherAgent();
+  final BreathAgent _breathAgent = BreathAgent();
   final YogaAgent _yogaAgent = YogaAgent();
 
   AgentDecision runDailyCycle(AgentContext context) {
@@ -23,6 +25,8 @@ class AgentOrchestrator {
     final progressOut = _progressAgent.evaluate(context);
     final visionOut = _visionAgent.evaluate(context);
     final deviceOut = _deviceAgent.evaluate(context);
+    final weatherOut = _weatherAgent.evaluate(context);
+    final breathOut = _breathAgent.evaluate(context);
     final yogaOut = _yogaAgent.evaluate(context);
 
     // Filter proposed actions through permission policy
@@ -35,6 +39,8 @@ class AgentOrchestrator {
       ...recoveryOut.proposedActions,
       ...visionOut.proposedActions,
       ...deviceOut.proposedActions,
+      ...weatherOut.proposedActions,
+      ...breathOut.proposedActions,
       ...yogaOut.proposedActions,
     ]) {
       final perm = AgentPermissionPolicy.evaluateActionPermission(action.type, action.targetTool);
@@ -48,13 +54,17 @@ class AgentOrchestrator {
 
     String title = "Today's Fitness Intelligence";
     String decisionText = "Your training split is on track. ${workoutOut.summary}";
-    String reasonText = "${progressOut.summary} ${recoveryOut.summary} ${nutritionOut.summary} ${deviceOut.summary}";
-    String evidenceText = "Based on recent workout feedback, metabolic targets, device signals, and ${visionOut.summary}";
+    String reasonText = "${progressOut.summary} ${recoveryOut.summary} ${nutritionOut.summary} ${weatherOut.summary}";
+    String evidenceText = "Based on recent workout feedback, metabolic targets, location weather signals (${weatherOut.summary}), and ${visionOut.summary}";
 
-    if (workoutOut.proposedActions.isNotEmpty || deviceOut.proposedActions.isNotEmpty) {
-      decisionText = workoutOut.proposedActions.isNotEmpty ? workoutOut.summary : deviceOut.summary;
-      reasonText = "Adapted based on recent exertion signals, recovery baseline, wearable device feedback (${deviceOut.summary}), and nutrition focus (${nutritionOut.summary}).";
-      evidenceText = "User feedback and device signals indicated fatigue or schedule constraints.";
+    if (workoutOut.proposedActions.isNotEmpty || deviceOut.proposedActions.isNotEmpty || weatherOut.proposedActions.isNotEmpty) {
+      decisionText = workoutOut.proposedActions.isNotEmpty
+          ? workoutOut.summary
+          : weatherOut.proposedActions.isNotEmpty
+              ? weatherOut.summary
+              : deviceOut.summary;
+      reasonText = "Adapted based on recent exertion signals, recovery baseline, location weather alerts (${weatherOut.summary}), wearable device feedback (${deviceOut.summary}), and nutrition focus.";
+      evidenceText = "User feedback, environmental weather alerts, and wearable signals indicated fatigue or schedule constraints.";
     }
 
     title = FitnessSafetyPolicy.sanitizeText(title);

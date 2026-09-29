@@ -24,6 +24,8 @@ import 'package:fitness_elite/features/devices/models/device_fitness_data.dart';
 import 'package:fitness_elite/features/fitness_engine/models/workout_day.dart';
 import 'package:fitness_elite/features/health_assessment/domain/fitness_profile.dart';
 import 'package:fitness_elite/features/voice/services/voice_agent_service.dart';
+import 'package:fitness_elite/features/weather/models/weather_fitness_data.dart';
+import 'package:fitness_elite/features/weather/services/weather_service.dart';
 import 'package:fitness_elite/features/workouts/models/workout_history_log.dart';
 import 'package:fitness_elite/features/yoga/services/yoga_library.dart';
 import 'package:flutter/material.dart';
@@ -152,6 +154,8 @@ void main() {
       final visionAgent = VisionAgent();
       final deviceAgent = DeviceAgent();
       final yogaAgent = YogaAgent();
+      final weatherAgent = WeatherAgent();
+      final breathAgent = BreathAgent();
 
       const context = AgentContext();
 
@@ -162,6 +166,8 @@ void main() {
       expect(visionAgent.evaluate(context).agentName, equals('VisionAgent'));
       expect(deviceAgent.evaluate(context).agentName, equals('DeviceAgent'));
       expect(yogaAgent.evaluate(context).agentName, equals('YogaAgent'));
+      expect(weatherAgent.evaluate(context).agentName, equals('WeatherAgent'));
+      expect(breathAgent.evaluate(context).agentName, equals('BreathAgent'));
     });
 
     test('6. WorkoutAgent proposes volume reduction upon high fatigue feedback', () {
@@ -394,6 +400,31 @@ void main() {
 
       engine.stop();
       expect(lastState?.phase, equals(BreathPhase.stopped));
+    });
+
+    test('21. WeatherService fetches location-based weather signals and detects alerts', () async {
+      final service = WeatherService();
+      final weather = await service.simulateRainAlert(cityName: 'New York');
+
+      expect(weather.cityName, equals('New York'));
+      expect(weather.hasWeatherAlert, isTrue);
+      expect(weather.alertMessage, contains('Rain alert'));
+    });
+
+    test('22. WeatherAgent proposes indoor workout modification upon rain alert', () {
+      final weatherAgent = WeatherAgent();
+      final rainData = WeatherFitnessData(
+        cityName: 'London',
+        temperatureCelsius: 14.0,
+        condition: 'Heavy Rain',
+        timestamp: DateTime.now(),
+      );
+
+      final context = AgentContext(weatherData: rainData);
+      final output = weatherAgent.evaluate(context);
+
+      expect(output.proposedActions.length, equals(1));
+      expect(output.proposedActions.first.type, equals('modify_workout'));
     });
   });
 }

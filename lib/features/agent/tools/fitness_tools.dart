@@ -3,6 +3,7 @@ import '../../ai_coach/models/complete_fitness_profile.dart';
 import '../../devices/models/device_fitness_data.dart';
 import '../../fitness_engine/models/fitness_plan.dart';
 import '../../fitness_engine/models/workout_day.dart';
+import '../../weather/models/weather_fitness_data.dart';
 import '../../workouts/models/workout_history_log.dart';
 
 /// 1. GetFitnessProfileTool
@@ -491,6 +492,31 @@ class GetYogaPreferencesTool extends AgentTool {
       success: true,
       output: 'Yoga Preference: Recovery & Post-workout mobility focus.',
       data: {'preference': 'Recovery & Post-workout mobility'},
+    );
+  }
+}
+
+/// 21. GetWeatherContextTool
+class GetWeatherContextTool extends AgentTool {
+  final WeatherFitnessData? weather;
+  GetWeatherContextTool(this.weather);
+
+  @override
+  String get name => 'GetWeatherContextTool';
+  @override
+  String get description => 'Retrieves location-based temperature, weather conditions, and environmental alerts.';
+  @override
+  bool get isReadOnly => true;
+
+  @override
+  Future<AgentToolResult> execute(Map<String, dynamic> parameters) async {
+    if (weather == null) {
+      return const AgentToolResult(success: false, output: 'No location weather signals active.');
+    }
+    return AgentToolResult(
+      success: true,
+      output: 'Location Weather (${weather!.cityName}): ${weather!.condition}, ${weather!.temperatureCelsius.toInt()}°C.',
+      data: weather!.toMap(),
     );
   }
 }

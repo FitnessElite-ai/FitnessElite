@@ -180,6 +180,29 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
 
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final alarmConfig = ref.watch(workoutAlarmNotifierProvider);
+                          return _SettingsTile(
+                            icon: Icons.alarm_rounded,
+                            title: 'Daily Workout Alarm',
+                            subtitle: alarmConfig.isEnabled
+                                ? 'Alarm set for ${alarmConfig.formattedTime}'
+                                : 'Alarm Disabled',
+                            onTap: () async {
+                              final picked = await showTimePicker(
+                                context: context,
+                                initialTime: alarmConfig.alarmTime,
+                              );
+                              if (picked != null) {
+                                ref.read(workoutAlarmNotifierProvider.notifier).updateTime(picked);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 8),
+
                       _SettingsTile(
                         icon: Icons.watch_rounded,
                         title: 'Connected Devices & Wearables',

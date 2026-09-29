@@ -2,6 +2,7 @@ import '../../ai_coach/models/complete_fitness_profile.dart';
 import '../../devices/models/device_fitness_data.dart';
 import '../../fitness_engine/models/fitness_plan.dart';
 import '../../fitness_engine/models/workout_day.dart';
+import '../../weather/models/weather_fitness_data.dart';
 import '../../workouts/models/workout_history_log.dart';
 import '../models/agent_context.dart';
 import '../models/agent_memory.dart';
@@ -15,6 +16,7 @@ class AgentContextBuilder {
     List<AgentMemory> memories = const [],
     List<AgentObservation> observations = const [],
     DeviceFitnessData? deviceData,
+    WeatherFitnessData? weatherData,
   }) {
     WorkoutDay? todayWorkout;
     if (currentPlan != null && currentPlan.weeklySchedule.isNotEmpty) {
@@ -30,6 +32,7 @@ class AgentContextBuilder {
       memories: memories,
       observations: observations,
       deviceData: deviceData,
+      weatherData: weatherData,
     );
   }
 }

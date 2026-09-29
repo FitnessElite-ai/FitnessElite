@@ -180,6 +180,53 @@ class DeviceAgent {
   }
 }
 
+/// Weather Sub-Agent evaluating location-based temperature and weather alerts.
+class WeatherAgent {
+  AgentOutput evaluate(AgentContext context) {
+    final weather = context.weatherData;
+    if (weather == null) {
+      return const AgentOutput(
+        agentName: 'WeatherAgent',
+        summary: 'No weather signals active.',
+      );
+    }
+
+    if (weather.hasWeatherAlert) {
+      return AgentOutput(
+        agentName: 'WeatherAgent',
+        summary: weather.alertMessage,
+        proposedActions: [
+          AgentAction(
+            id: 'act_weather_indoor_${DateTime.now().millisecondsSinceEpoch}',
+            type: 'modify_workout',
+            description: 'Adapt outdoor session to indoor home split due to weather alert (${weather.condition})',
+            targetTool: 'ModifyWorkoutTool',
+            parameters: {
+              'location': 'Home',
+              'reason': weather.alertMessage,
+            },
+          ),
+        ],
+      );
+    }
+
+    return AgentOutput(
+      agentName: 'WeatherAgent',
+      summary: '${weather.cityName}: ${weather.condition} (${weather.temperatureCelsius.toInt()}°C). Ideal outdoor conditions.',
+    );
+  }
+}
+
+/// Breath Coach Sub-Agent guiding exercise breathing techniques and recovery breathwork.
+class BreathAgent {
+  AgentOutput evaluate(AgentContext context) {
+    return const AgentOutput(
+      agentName: 'BreathAgent',
+      summary: 'Biomechanically aligned breathing cues ready for exercises and recovery sessions.',
+    );
+  }
+}
+
 /// Yoga & Mobility Sub-Agent generating recovery routines and stretches.
 class YogaAgent {
   AgentOutput evaluate(AgentContext context) {

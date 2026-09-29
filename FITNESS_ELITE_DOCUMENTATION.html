@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FitnessElite.ai — Technical Documentation & Shipathon System Manual</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0F172A;
+    background-color: #FFFFFF;
+    line-height: 1.6;
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 0 20px;
+  }
+  h1, h2, h3, h4 {
+    color: #08090C;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  h1 {
+    font-size: 28px;
+    border-bottom: 2px solid #00F0FF;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 22px;
+    margin-top: 30px;
+    border-bottom: 1px solid #E2E8F0;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 18px;
+    margin-top: 20px;
+  }
+  blockquote {
+    background-color: #F8FAFC;
+    border-left: 4px solid #00F0FF;
+    margin: 16px 0;
+    padding: 12px 16px;
+    font-style: italic;
+    color: #334155;
+  }
+  code {
+    background-color: #F1F5F9;
+    color: #0F172A;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  pre {
+    background-color: #08090C;
+    color: #F8FAFC;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+  pre code {
+    background-color: transparent;
+    color: #00F0FF;
+    padding: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  th, td {
+    border: 1px solid #CBD5E1;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 14px;
+  }
+  th {
+    background-color: #F8FAFC;
+    font-weight: 700;
+  }
+  .highlight {
+    color: #007AFF;
+    font-weight: 700;
+  }
+  .formula {
+    background-color: #F8FAFC;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid #007AFF;
+    font-family: serif;
+    margin: 12px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>FITNESS ELITE.AI — TECHNICAL DOCUMENTATION & SHIPATHON SYSTEM MANUAL</h1>
+
+<p><strong>Product Name:</strong> FitnessElite.ai<br>
+<strong>Core Architecture:</strong> Autonomous Agentic Personal Fitness System<br>
+<strong>Platform:</strong> Flutter (iOS & Android)</p>
+
+<blockquote>
+"Most fitness apps give you a plan. FitnessElite.ai gives you an agent."
+</blockquote>
+
+<hr>
+
+<h2>1. Executive Summary</h2>
+<p><strong>FitnessElite.ai</strong> is an autonomous, agentic personal fitness operating system built in Flutter. Unlike traditional fitness applications that generate static 12-week workout templates, FitnessElite.ai operates a real-time, deterministic observe-understand-plan-decide-act-reflect loop. The system continuously evaluates user workout feedback, recovery signals, sleep indexes, and daily schedule constraints to dynamically adapt training splits, macronutrient targets, and active recovery protocols.</p>
+
+<hr>
+
+<h2>2. Devpost / Competition Submission Story</h2>
+
+<h3>Inspiration</h3>
+<p>Most fitness applications treat human beings like static algorithms. They ask a few onboarding questions, generate a rigid 12-week workout template, and expect users to execute it without fail.</p>
+
+<p>In the real world, <strong>life is unpredictable</strong>. Users face unexpected work deadlines, poor sleep quality, high fatigue, or only have 20 minutes available on a busy morning. When static workout apps fail to accommodate real-world volatility, users experience friction, burnout, and eventual abandonment.</p>
+
+<p>We created <strong>FitnessElite.ai</strong> to pioneer a new paradigm: the <strong>Autonomous Agentic Personal Fitness System</strong>. Rather than handing users a static routine, FitnessElite.ai acts as an intelligent digital twin that continuously observes daily fitness signals, reflects on performance and recovery, learns personal habits over time, and dynamically adapts training splits, nutrition focus, and recovery routines.</p>
+
+<div class="formula">
+  <strong>Static Plan</strong> &rarr; Rigid Template &nbsp;&nbsp;&nbsp;VS.&nbsp;&nbsp;&nbsp; <strong>FitnessElite.ai</strong> &rarr; Autonomous Agent Loop
+</div>
+
+<h3>What It Does</h3>
+<p><strong>FitnessElite.ai</strong> operates as a 24/7 personal health and fitness operating system:</p>
+
+<ol>
+  <li><strong>Biometric Digital Twin:</strong> Constructs a complete health profile incorporating BMR, TDEE, macronutrient targets, dietary preferences (Flexitarian, Vegetarian, Vegan, Eggetarian, Non-veg), and optional optical posture assessments.</li>
+  <li><strong>Autonomous Agent Loop:</strong> Executes a continuous observe-understand-plan-decide-act-reflect cycle:
+    <div class="formula">OBSERVE &rarr; UNDERSTAND &rarr; PLAN &rarr; DECIDE &rarr; ACT &rarr; REFLECT &rarr; ADAPT</div>
+  </li>
+  <li><strong>Adaptive Fitness Engine:</strong> When a user logs high fatigue (Rating: Very Challenging), skips a workout, or inputs a constraint (Time &le; 20 min), the agent automatically recalculates today's session duration and volume while preserving the core progressive overload stimulus.</li>
+  <li><strong>Structured Personal Memory ("Your AI Knows"):</strong> Retains categorized memories (PROFILE, PREFERENCES, ADHERENCE, RECOVERY, VISION) with 100% user transparency and 1-tap removal controls.</li>
+  <li><strong>Conversational AI Fitness Coach:</strong> Delivers contextual guidance regarding exercise form, breathing cues, meal timing, and substitutions via a provider-agnostic LLM adapter architecture.</li>
+  <li><strong>Human-in-the-Loop Safety:</strong> Explains every adaptation transparently ("WHY THIS CHANGED") with [ Accept Adaptation ] or [ Keep Original ] controls, backed by strict safety policies prohibiting dangerous exercise instructions or clinical medical diagnoses.</li>
+</ol>
+
+<hr>
+
+<h2>3. System Architecture & Component Diagram</h2>
+
+<h3>Agentic Processing Loop</h3>
+<p>The core execution model follows a closed-loop control architecture:</p>
+
+<pre><code>+-----------------------------------------------------------------------+
+|                            USER SIGNALS                               |
+|   (Workout Completion, Fatigue Rating, Available Time, Sleep Index)   |
++-----------------------------------------------------------------------+
+                                   |
+                                   v
++-----------------------------------------------------------------------+
+|                         AgentContextBuilder                           |
+|       Aggregates Profile + Preferences + History + Memory + Vision    |
++-----------------------------------------------------------------------+
+                                   |
+                                   v
++-----------------------------------------------------------------------+
+|                          AgentOrchestrator                            |
+|    Coordinates Specialized Sub-Agents & Evaluates Proposed Actions    |
+|   [WorkoutAgent | NutritionAgent | RecoveryAgent | ProgressAgent |    |
+|                     CoachAgent | VisionAgent]                         |
++-----------------------------------------------------------------------+
+                                   |
+                                   v
++-----------------------------------------------------------------------+
+|                       AgentPermissionPolicy                           |
+|      Filters Actions: Read | LowRiskWrite | UserConfirmation          |
++-----------------------------------------------------------------------+
+                                   |
+                                   v
++-----------------------------------------------------------------------+
+|                       FitnessSafetyPolicy                             |
+|             Sanitizes Text Output & Enforces Health Rules             |
++-----------------------------------------------------------------------+
+                                   |
+                                   v
++-----------------------------------------------------------------------+
+|                           AgentDecision                               |
+|        Produces User-Facing Decision, Explanation & Actions           |
++-----------------------------------------------------------------------+
+                                   |
+                                   v
++-----------------------------------------------------------------------+
+|                       FitnessMemoryService                            |
+|            Persists Categorized Learned Preferences & Decisions       |
++-----------------------------------------------------------------------+</code></pre>
+
+<hr>
+
+<h2>4. Mathematical & Metabolic Engine</h2>
+
+<p>Baseline metabolic targets and macronutrient distributions are calculated deterministically to guarantee accuracy and eliminate AI hallucinations.</p>
+
+<h3>Basal Metabolic Rate (BMR)</h3>
+<p>Calculated via the Mifflin-St Jeor formula:</p>
+<div class="formula">
+  <strong>BMR (male)</strong> = 10 &middot; W + 6.25 &middot; H - 5 &middot; A + 5<br>
+  <strong>BMR (female)</strong> = 10 &middot; W + 6.25 &middot; H - 5 &middot; A - 161
+</div>
+<p>Where <em>W</em> = weight in kg, <em>H</em> = height in cm, <em>A</em> = age in years.</p>
+
+<h3>Total Daily Energy Expenditure (TDEE)</h3>
+<div class="formula">
+  <strong>TDEE</strong> = BMR &middot; &alpha;<sub>activity</sub>
+</div>
+<p>Where &alpha;<sub>activity</sub> ranges from 1.200 (sedentary) to 1.900 (extreme activity).</p>
+
+<h3>Macronutrient Targets</h3>
+<div class="formula">
+  <strong>Calories (target)</strong> = Deficit (Fat Loss: 0.82 &middot; TDEE, Min 1200-1500) | Surplus (Muscle: 1.10 &middot; TDEE)<br>
+  <strong>Protein (grams)</strong> = clamp(W &middot; &beta;<sub>protein</sub>, 60, 240) where &beta;<sub>protein</sub> = 1.4 - 2.0 g/kg
+</div>
+
+<hr>
+
+<h2>5. Specialized Sub-Agents</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Agent</th>
+      <th>Responsibilities</th>
+      <th>Output Schema</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>WorkoutAgent</strong></td>
+      <td>Analyzes workout history, fatigue feedback ("Very challenging"), and time availability. Triggers volume compression or alternative exercises.</td>
+      <td>Proposed <code>AgentAction</code> (duration reduction, volume modification).</td>
+    </tr>
+    <tr>
+      <td><strong>NutritionAgent</strong></td>
+      <td>Evaluates dietary preferences (Flexitarian, Vegetarian, Vegan, Eggetarian, Non-veg) and macro energy targets.</td>
+      <td>Daily calorie, protein, carb, and fat targets.</td>
+    </tr>
+    <tr>
+      <td><strong>RecoveryAgent</strong></td>
+      <td>Tracks sleep target compliance, hydration indexes, and mobility protocols.</td>
+      <td>Recovery status score (0-100%) and active mobility recommendation.</td>
+    </tr>
+    <tr>
+      <td><strong>ProgressAgent</strong></td>
+      <td>Calculates workout completion streaks, total volume, and milestone targets.</td>
+      <td>Streak index and milestone summaries.</td>
+    </tr>
+    <tr>
+      <td><strong>CoachAgent</strong></td>
+      <td>Provides conversational explanations, breathing cues, and exercise form guidance.</td>
+      <td>User-explainable decision text and response strings.</td>
+    </tr>
+    <tr>
+      <td><strong>VisionAgent</strong></td>
+      <td>Evaluates optical posture assessment signals (e.g., forward head posture, shoulder alignment) safely.</td>
+      <td>Postural realignment exercise recommendations.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>6. Tool Execution & Security Specs</h2>
+
+<p>The system implements <strong>16 strictly-typed agent tools</strong> inheriting from <code>AgentTool</code>:</p>
+
+<ol>
+  <li><code>GetFitnessProfileTool</code> — Retrieves user biometric profile and baseline targets.</li>
+  <li><code>GetCurrentPlanTool</code> — Retrieves active personalized fitness plan and schedule.</li>
+  <li><code>GetTodayWorkoutTool</code> — Retrieves today's scheduled workout session details.</li>
+  <li><code>GetRecentProgressTool</code> — Calculates streak, completion rates, and progress metrics.</li>
+  <li><code>GetWorkoutHistoryTool</code> — Retrieves recent completed workout logs and feedback ratings.</li>
+  <li><code>GetNutritionContextTool</code> — Retrieves macro targets, dietary preferences, and meal guidance.</li>
+  <li><code>GetRecoveryContextTool</code> — Retrieves recovery status, sleep target, and mobility guidance.</li>
+  <li><code>GetUserPreferencesTool</code> — Retrieves user location, time availability, equipment, and dietary preferences.</li>
+  <li><code>GetVisionInsightsTool</code> — Retrieves optical posture and form assessment insights.</li>
+  <li><code>GenerateWorkoutTool</code> — Generates a custom workout session matching time and equipment parameters.</li>
+  <li><code>ModifyWorkoutTool</code> — Modifies duration or exercise list based on fatigue/time constraints.</li>
+  <li><code>GenerateNutritionGuidanceTool</code> — Generates targeted nutrition focus and meal adjustments.</li>
+  <li><code>UpdateGoalTool</code> — Updates active non-medical fitness goals and target milestones.</li>
+  <li><code>LogWorkoutTool</code> — Logs completed workout session performance details.</li>
+  <li><code>LogFeedbackTool</code> — Logs subjective fatigue and exertion feedback from completed workout.</li>
+  <li><code>CreateRecoveryPlanTool</code> — Generates active recovery and mobility protocol for fatigue management.</li>
+</ol>
+
+<h3>Permission Policy Matrix (<code>AgentPermissionPolicy</code>)</h3>
+<ul>
+  <li><strong>read:</strong> Get profile, get plan, get history, get recovery status.</li>
+  <li><strong>lowRiskWrite:</strong> Log workout, log feedback, modify workout duration, save preference.</li>
+  <li><strong>userConfirmationRequired:</strong> Major plan resets, subscription actions, vision upload.</li>
+  <li><strong>neverAllowed:</strong> Medical diagnosis, medication advice, extreme fasting targets (&lt; 800 kcal), exact body composition claims.</li>
+</ul>
+
+<hr>
+
+<h2>7. Challenges & Accomplishments</h2>
+
+<h3>Challenges We Ran Into</h3>
+<ol>
+  <li><strong>Deterministic Safety vs. Agentic Flexibility:</strong> Combining autonomous AI adaptability with rigid health safety was a primary challenge. We solved this by enforcing a hybrid architecture: deterministic rule-based calculation for metabolic baselines paired with agentic reasoning for contextual plan adaptation.</li>
+  <li><strong>Offline Reliability:</strong> Fitness apps must work in gyms with spotty cell reception. We engineered <code>StructuredUserIntent</code> and <code>DeterministicFallbackProvider</code> to parse queries and adapt plans locally without requiring active cloud LLM connections.</li>
+  <li><strong>Consumer UI Refinement:</strong> Early versions exposed technical developer terms (Node Pipeline, Vector Embeddings, Execution Graph). We overhauled the UI into Apple-level consumer language (Your Profile, Today's Signals, Smart Decision, Plan Adaptation, Learning From You).</li>
+  <li><strong>Zero-Warning Code Quality:</strong> Ensuring zero <code>flutter analyze</code> warnings across 9 localized languages while writing unit tests for complex asynchronous state transitions required strict test-driven discipline.</li>
+</ol>
+
+<h3>Accomplishments We're Proud Of</h3>
+<ul>
+  <li><strong>100% Test Success (64 / 64 Tests Passing):</strong> Achieved full test pass rate across unit, widget, and integration tests (<code>agent_system_test.dart</code>, <code>fitness_engine_test.dart</code>, <code>production_hardening_test.dart</code>, <code>subscription_test.dart</code>, <code>vision_assessment_test.dart</code>, <code>app_test.dart</code>).</li>
+  <li><strong>0 Analyzer Issues:</strong> Maintained zero warnings or errors across the entire codebase.</li>
+  <li><strong>Competition Demo Mode:</strong> Built a dedicated judge demo toggle featuring synthetic user <strong>"Alex Morgan"</strong> that demonstrates a 3-day adaptive scenario (Day 1: 45m workout completed &rarr; Day 2: Missed workout &rarr; Day 3: High fatigue reported &rarr; Agent detects pattern and adapts plan down to 30m).</li>
+  <li><strong>Consumer-Grade Product Quality:</strong> Delivered a cohesive user experience where the home screen, workout player, progress analytics, memory viewer, and AI coach function as a unified intelligent system.</li>
+</ul>
+
+<hr>
+
+<h2>8. Verification & Testing Log</h2>
+
+<pre><code>$ flutter analyze
+Analyzing FitnessElite...
+No issues found! (ran in 1.5s)
+
+$ flutter test
+00:07 +64: All tests passed!</code></pre>
+
+<hr>
+
+<h2>9. Summary for Competition Submission</h2>
+<ul>
+  <li><strong>Product Name:</strong> FitnessElite.ai</li>
+  <li><strong>Core Value Prop:</strong> Autonomous AI Agentic Fitness System that continuously adapts workout plans based on real-world life feedback.</li>
+  <li><strong>Judge Demo Trigger:</strong> Tap the <code>Icons.tune_rounded</code> icon in the Home App Bar to toggle <strong>Demo Competition Mode</strong> ("Alex Morgan" 3-day scenario).</li>
+</ul>
+
+</body>
+</html>

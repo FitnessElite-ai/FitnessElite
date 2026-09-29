@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../app/theme/app_colors.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/services/persistence_providers.dart';
 import '../../core/utils/responsive_utils.dart';
 import '../../shared/animations/fade_in_animation.dart';
 import '../../shared/animations/glass_entrance_animation.dart';
@@ -129,6 +130,7 @@ class _HomeDashboardTab extends ConsumerWidget {
       todayWorkout = plan.weeklySchedule[todayIndex];
     }
 
+    final alarmConfig = ref.watch(workoutAlarmNotifierProvider);
     final greeting = _getGreeting();
 
     return Scaffold(
@@ -224,7 +226,7 @@ class _HomeDashboardTab extends ConsumerWidget {
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Your Fitness Agent • Watching your progress',
+                                      'Your Fitness Agent • Active${alarmConfig.isEnabled ? " • Alarm ${alarmConfig.formattedTime}" : ""}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
@@ -395,6 +397,40 @@ class _HomeDashboardTab extends ConsumerWidget {
                                         color: AppColors.electricBlue,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w800)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // LOCATION WEATHER CARD
+                      GlassEntranceAnimation(
+                        delay: const Duration(milliseconds: 120),
+                        child: GlassCard(
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.electricBlue.withValues(alpha: 0.15),
+                                ),
+                                child: const Icon(Icons.wb_sunny_rounded, color: AppColors.electricBlue, size: 18),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('TODAY\'S LOCATION WEATHER', style: TextStyle(color: AppColors.electricBlue, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 0.8)),
+                                    const SizedBox(height: 2),
+                                    Text('San Francisco • 22°C Sunny', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+                                    Text('Ideal conditions for home and outdoor training.', style: Theme.of(context).textTheme.bodySmall),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
